@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediControl — Mis Medicamentos</title>
+
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============================================
+       CABECERA
+       ============================================ -->
+  <div class="cabecera">
+    <div class="cabecera-icono">
+      <i class="ti ti-pill"></i>
+    </div>
+    <div>
+      <div class="cabecera-titulo">Mis Medicamentos</div>
+      <div class="cabecera-sub">Control facil de tu medicacion</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       NAVEGACION PRINCIPAL
+       ============================================ -->
+  <nav class="nav" aria-label="Menu principal">
+    <button class="nav-btn active" onclick="ir('inicio', this)">
+      <i class="ti ti-home"></i>
+      <span>Inicio</span>
+    </button>
+    <button class="nav-btn" onclick="ir('agregar', this)">
+      <i class="ti ti-circle-plus"></i>
+      <span>Agregar</span>
+    </button>
+    <button class="nav-btn" onclick="ir('lista', this)">
+      <i class="ti ti-list"></i>
+      <span>Mi lista</span>
+    </button>
+    <button class="nav-btn" onclick="ir('toma', this)">
+      <i class="ti ti-clock-check"></i>
+      <span>Registrar toma</span>
+    </button>
+    <button class="nav-btn" onclick="ir('alertas', this)">
+      <i class="ti ti-bell"></i>
+      <span>Alertas</span>
+    </button>
+    <button class="nav-btn" onclick="ir('dias', this)">
+      <i class="ti ti-calendar-stats"></i>
+      <span>Dias restantes</span>
+    </button>
+  </nav>
+
+  <!-- ============================================
+       SECCION: INICIO
+       ============================================ -->
+  <section id="s-inicio" class="section active">
+
+    <!-- Metricas generales -->
+    <div class="metricas" id="metricas"></div>
+
+    <!-- Alertas del dia -->
+    <div class="card">
+      <div class="card-titulo">
+        <i class="ti ti-bell"></i> Alertas importantes
+      </div>
+      <div id="inicio-alertas"></div>
+    </div>
+
+    <!-- Ultimas tomas -->
+    <div class="card">
+      <div class="card-titulo">
+        <i class="ti ti-clock-check"></i> Ultimas tomas registradas
+      </div>
+      <div id="inicio-historial"></div>
+    </div>
+
+  </section>
+
+  <!-- ============================================
+       SECCION: AGREGAR MEDICAMENTO
+       ============================================ -->
+  <section id="s-agregar" class="section">
+    <div class="card">
+      <div class="card-titulo">
+        <i class="ti ti-circle-plus"></i> Nuevo medicamento
+      </div>
+
+      <label class="campo-label" for="f-nombre">Nombre del medicamento</label>
+      <input id="f-nombre" type="text" placeholder="Ej: Enalapril">
+
+      <label class="campo-label" for="f-doctor">Doctor que lo receto</label>
+      <input id="f-doctor" type="text" placeholder="Ej: Dr. Martinez">
+
+      <label class="campo-label" for="f-categoria">Categoria</label>
+      <select id="f-categoria">
+        <option value="">Seleccionar...</option>
+        <option>Analgesico</option>
+        <option>Antibiotico</option>
+        <option>Antihipertensivo</option>
+        <option>Antidiabetico</option>
+        <option>Anticoagulante</option>
+        <option>Vitamina / suplemento</option>
+        <option>Antiacido</option>
+        <option>Otro</option>
+      </select>
+
+      <div class="grid2">
+        <div>
+          <label class="campo-label" for="f-dosis">Pastillas por toma</label>
+          <input id="f-dosis" type="number" min="1" value="1">
+        </div>
+        <div>
+          <label class="campo-label" for="f-frecuencia">Tomas por dia</label>
+          <input id="f-frecuencia" type="number" min="1" value="1">
+        </div>
+      </div>
+
+      <label class="campo-label" for="f-stock">Cantidad disponible ahora</label>
+      <input id="f-stock" type="number" min="0" value="30">
+
+      <div class="grid2">
+        <div>
+          <label class="campo-label" for="f-inicio">Fecha de inicio</label>
+          <input id="f-inicio" type="date">
+        </div>
+        <div>
+          <label class="campo-label" for="f-termino">Fecha de fin del tratamiento</label>
+          <input id="f-termino" type="date">
+        </div>
+      </div>
+
+      <label class="campo-label" for="f-vencimiento">Fecha de vencimiento del envase</label>
+      <input id="f-vencimiento" type="date">
+
+      <button class="btn-grande" onclick="agregar()">
+        <i class="ti ti-circle-check"></i> Guardar medicamento
+      </button>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SECCION: LISTA DE MEDICAMENTOS
+       ============================================ -->
+  <section id="s-lista" class="section">
+
+    <div class="buscar-box">
+      <i class="ti ti-search"></i>
+      <input
+        type="text"
+        id="inp-buscar"
+        placeholder="Buscar por nombre..."
+        oninput="filtrar(this.value)"
+        aria-label="Buscar medicamento"
+      >
+    </div>
+
+    <div id="lista-contenido"></div>
+
+  </section>
+
+  <!-- ============================================
+       SECCION: REGISTRAR TOMA
+       ============================================ -->
+  <section id="s-toma" class="section">
+
+    <div class="card">
+      <div class="card-titulo">
+        <i class="ti ti-clock-check"></i> Que medicamento tomaste?
+      </div>
+
+      <label class="campo-label" for="sel-med">Selecciona el medicamento</label>
+      <select id="sel-med"></select>
+
+      <div id="info-toma" style="margin-top:16px; font-size:16px; color:var(--texto-sec); line-height:1.8;"></div>
+
+      <button class="btn-toma" onclick="registrarToma()">
+        <i class="ti ti-circle-check"></i> Registrar que lo tome
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-titulo">
+        <i class="ti ti-history"></i> Historial de tomas
+      </div>
+      <div id="historial-detalle"></div>
+    </div>
+
+  </section>
+
+  <!-- ============================================
+       SECCION: ALERTAS
+       ============================================ -->
+  <section id="s-alertas" class="section">
+
+    <div class="card">
+      <div class="card-titulo">
+        <i class="ti ti-settings"></i> Configurar alertas
+      </div>
+      <div class="grid2">
+        <div>
+          <label class="campo-label" for="umbral-s">
+            Avisar cuando el stock sea menor a...
+          </label>
+          <input id="umbral-s" type="number" value="5" min="1" oninput="renderAlertas()">
+        </div>
+        <div>
+          <label class="campo-label" for="umbral-d">
+            Avisar cuando falten menos de... dias para vencer
+          </label>
+          <input id="umbral-d" type="number" value="30" min="1" oninput="renderAlertas()">
+        </div>
+      </div>
+    </div>
+
+    <div id="alertas-contenido"></div>
+
+  </section>
+
+  <!-- ============================================
+       SECCION: DIAS RESTANTES
+       ============================================ -->
+  <section id="s-dias" class="section">
+    <div class="card">
+      <div class="card-titulo">
+        <i class="ti ti-calendar-stats"></i> Cuantos dias me alcanza cada medicamento?
+      </div>
+      <div id="dias-contenido"></div>
+    </div>
+  </section>
+
+</div><!-- fin .app -->
+
+<!-- Toast de notificaciones -->
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+<!-- Logica de la aplicacion -->
+<script src="js/app.js"></script>
+
+</body>
+</html>

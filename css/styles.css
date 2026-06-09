@@ -1,0 +1,548 @@
+/* =============================================
+   MEDICONTROL — Estilos principales
+   Aplicacion de gestion de medicamentos
+   ============================================= */
+
+/* --- Variables globales --- */
+:root {
+  --verde:         #0F6E56;
+  --verde-claro:   #E1F5EE;
+  --naranja:       #854F0B;
+  --naranja-claro: #FAEEDA;
+  --rojo:          #A32D2D;
+  --rojo-claro:    #FCEBEB;
+  --fondo:         #F8F8F6;
+  --blanco:        #fff;
+  --texto:         #1a1a1a;
+  --texto-sec:     #555;
+  --borde:         #ddd;
+}
+
+/* --- Reset y base --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  font-size: 18px;
+}
+
+/* =============================================
+   LAYOUT
+   ============================================= */
+
+.app {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 4rem;
+}
+
+/* =============================================
+   CABECERA
+   ============================================= */
+
+.cabecera {
+  background: var(--verde);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cabecera-icono {
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.cabecera-titulo {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.cabecera-sub {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  margin-top: 2px;
+}
+
+/* =============================================
+   NAVEGACION
+   ============================================= */
+
+.nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.nav-btn {
+  border: 2px solid var(--borde);
+  background: var(--blanco);
+  border-radius: 14px;
+  padding: 14px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+  color: var(--texto-sec);
+}
+
+.nav-btn i {
+  font-size: 26px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.nav-btn span {
+  font-size: 14px;
+  font-weight: 500;
+  display: block;
+}
+
+.nav-btn.active {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: #fff;
+}
+
+.nav-btn:hover:not(.active) {
+  background: #f0f0ee;
+  border-color: #bbb;
+}
+
+/* =============================================
+   SECCIONES
+   ============================================= */
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+/* =============================================
+   TARJETAS
+   ============================================= */
+
+.card {
+  background: var(--blanco);
+  border: 1.5px solid var(--borde);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-titulo {
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--texto);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-titulo i {
+  font-size: 22px;
+}
+
+/* =============================================
+   FORMULARIOS
+   ============================================= */
+
+.campo-label {
+  font-size: 16px;
+  color: var(--texto-sec);
+  display: block;
+  margin-bottom: 6px;
+  margin-top: 18px;
+  font-weight: 500;
+}
+
+.campo-label:first-child {
+  margin-top: 0;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--borde);
+  border-radius: 12px;
+  background: var(--blanco);
+  color: var(--texto);
+  font-size: 18px;
+  font-family: inherit;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--verde);
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* =============================================
+   BOTONES
+   ============================================= */
+
+.btn-grande {
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.15s;
+}
+
+.btn-grande:hover {
+  background: #085041;
+}
+
+.btn-toma {
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 12px;
+  transition: background 0.15s;
+}
+
+.btn-toma:hover {
+  background: #085041;
+}
+
+.btn-eliminar {
+  background: var(--rojo-claro);
+  color: var(--rojo);
+  border: 2px solid #f0a0a0;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-eliminar:hover {
+  background: #f7c1c1;
+}
+
+/* =============================================
+   TARJETA DE MEDICAMENTO
+   ============================================= */
+
+.med-card {
+  background: var(--blanco);
+  border: 2px solid var(--borde);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.med-nombre {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.med-doctor {
+  font-size: 15px;
+  color: var(--texto-sec);
+  margin-top: 3px;
+  margin-bottom: 14px;
+}
+
+.med-dato {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+}
+
+.med-dato:last-of-type {
+  border-bottom: none;
+}
+
+.med-dato-k {
+  color: var(--texto-sec);
+}
+
+.med-dato-v {
+  font-weight: 600;
+  color: var(--texto);
+}
+
+/* =============================================
+   BARRA DE STOCK
+   ============================================= */
+
+.stock-barra {
+  height: 12px;
+  background: #eee;
+  border-radius: 6px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+.stock-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s;
+}
+
+.stock-txt {
+  font-size: 14px;
+  color: var(--texto-sec);
+  margin-top: 6px;
+}
+
+/* =============================================
+   ALERTAS
+   ============================================= */
+
+.alerta {
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.alerta-stock {
+  background: var(--naranja-claro);
+  border: 1.5px solid #EF9F27;
+}
+
+.alerta-venc {
+  background: var(--rojo-claro);
+  border: 1.5px solid #E24B4A;
+}
+
+.alerta-ok {
+  background: var(--verde-claro);
+  border: 1.5px solid #1D9E75;
+}
+
+.alerta i {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.alerta-stock i { color: var(--naranja); }
+.alerta-venc i  { color: var(--rojo); }
+.alerta-ok i    { color: var(--verde); }
+
+.alerta-titulo {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.alerta-stock .alerta-titulo { color: #633806; }
+.alerta-venc .alerta-titulo  { color: #A32D2D; }
+.alerta-ok .alerta-titulo    { color: #0F6E56; }
+
+.alerta-detalle {
+  font-size: 15px;
+  color: #555;
+}
+
+/* =============================================
+   METRICAS (dashboard)
+   ============================================= */
+
+.metricas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.metrica {
+  background: var(--blanco);
+  border: 1.5px solid var(--borde);
+  border-radius: 14px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.metrica-num {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+.metrica-lbl {
+  font-size: 14px;
+  color: var(--texto-sec);
+  margin-top: 4px;
+}
+
+/* =============================================
+   DIAS RESTANTES
+   ============================================= */
+
+.dias-card {
+  background: #f5f5f2;
+  border-radius: 14px;
+  padding: 1.25rem;
+  margin-bottom: 10px;
+}
+
+.dias-nom {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.dias-num {
+  font-size: 38px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.dias-lbl {
+  font-size: 14px;
+  color: var(--texto-sec);
+}
+
+/* =============================================
+   HISTORIAL DE TOMAS
+   ============================================= */
+
+.historial-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+}
+
+.historial-item i {
+  font-size: 20px;
+  color: var(--verde);
+}
+
+/* =============================================
+   TOAST (notificaciones)
+   ============================================= */
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #085041;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 999;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.toast.show  { opacity: 1; }
+.toast.error { background: #A32D2D; }
+
+/* =============================================
+   ESTADOS VACIOS
+   ============================================= */
+
+.empty {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--texto-sec);
+  font-size: 17px;
+}
+
+.empty i {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 10px;
+  color: #ccc;
+}
+
+/* =============================================
+   BUSCADOR
+   ============================================= */
+
+.buscar-box {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.buscar-box i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  color: var(--texto-sec);
+}
+
+.buscar-box input {
+  padding-left: 46px;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+@media (max-width: 500px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .nav   { grid-template-columns: repeat(2, 1fr); }
+}

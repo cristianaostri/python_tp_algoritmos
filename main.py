@@ -1,0 +1,133 @@
+from datetime import datetime
+
+class Medicamento:
+    def __init__(self, nombre, dosis, frecuencia, fecha_inicio, fecha_termino, stock, vencimiento, nombre_doctor):
+        self.nombre = nombre
+        self.dosis = dosis
+        self.frecuencia = frecuencia
+        self.fecha_inicio = fecha_inicio
+        self.fecha_termino = fecha_termino
+        self.stock = stock
+        self.vencimiento = vencimiento
+        self.nombre_doctor = nombre_doctor
+
+def agregar_medicamento():
+    nombre = input("Ingrese el nombre del medicamento: ")
+    dosis = int(input("Ingrese la cantidad de pastillas/ml por cada toma: "))
+    frecuencia = input("Ingrese la frecuencia de administración (ej. cada 8 horas): ")
+    
+    fecha_inicio = datetime.strptime(input("Ingrese la fecha de inicio (YYYY-MM-DD): "), "%Y-%m-%d")
+    fecha_termino = datetime.strptime(input("Ingrese la fecha de término (YYYY-MM-DD): "), "%Y-%m-%d")
+    stock = int(input("Ingrese el stock total disponible del medicamento: "))
+    vencimiento = datetime.strptime(input("Ingrese la fecha de vencimiento (YYYY-MM-DD): "), "%Y-%m-%d")
+    nombre_doctor = input("Ingrese el nombre del doctor que recetó el medicamento: ")
+    
+    medicamento = {
+        "nombre": nombre,
+        "dosis": dosis,
+        "frecuencia": frecuencia,
+        "fecha_inicio": fecha_inicio,
+        "fecha_termino": fecha_termino,
+        "stock": stock,
+        "vencimiento": vencimiento,
+        "nombre_doctor": nombre_doctor
+    }
+    return medicamento
+
+def mostrar_medicamentos(medicamentos):
+    if not medicamentos:
+        print("No hay medicamentos registrados.")
+        return
+    for med in medicamentos:
+        print(f"\nNombre: {med['nombre']}")
+        print(f"Dosis por toma: {med['dosis']}")
+        print(f"Frecuencia: {med['frecuencia']}")
+        print(f"Fecha de inicio: {med['fecha_inicio'].strftime('%Y-%m-%d')}")
+        print(f"Fecha de término: {med['fecha_termino'].strftime('%Y-%m-%d')}")
+        print(f"Stock actual: {med['stock']}")
+        print(f"Vencimiento: {med['vencimiento'].strftime('%Y-%m-%d')}")
+        print(f"Doctor: {med['nombre_doctor']}")
+        print("-" * 30)
+
+def registrar_toma(medicamentos, nombre_buscar):
+    for med in medicamentos:
+        if med['nombre'].lower() == nombre_buscar.lower():
+            if med['stock'] >= med['dosis']:
+                med['stock'] -= med['dosis']
+                print(f"Se ha registrado la toma de {med['nombre']}. Stock restante: {med['stock']}")
+            else:
+                print(f"¡Alerta! No hay suficiente stock para descontar la dosis de {med['nombre']}.")
+            return
+    print("Medicamento no encontrado.")
+
+def verificar_alertas(medicamentos, umbral_stock, dias_vencimiento):
+    hoy = datetime.now()
+    for med in medicamentos:
+        if med['stock'] < umbral_stock:
+            print(f"Alerta: El stock de {med['nombre']} es menor a {umbral_stock}. Stock actual: {med['stock']}")
+        
+        dias_faltantes = (med['vencimiento'] - hoy).days
+        if dias_faltantes < dias_vencimiento and dias_faltantes >= 0:
+            print(f"Alerta: El medicamento {med['nombre']} está próximo a vencer. Vence en {dias_faltantes} días.")
+
+def calcular_dias_restantes(medicamentos):
+    # Días teóricos asumiendo 1 toma diaria. Para exactitud, se requiere la frecuencia en horas.
+    for med in medicamentos:
+        if med['dosis'] > 0:
+            dias_restantes = med['stock'] // med['dosis']
+            print(f"El medicamento {med['nombre']} tiene suficiente stock para aproximadamente {dias_restantes} días.")
+        else:
+            print(f"Error en la dosis de {med['nombre']}.")
+
+def buscar_medicamento(medicamentos, nombre_buscar):
+    for med in medicamentos:
+        if med['nombre'].lower() == nombre_buscar.lower():
+            print(f"\nNombre: {med['nombre']}")
+            print(f"Dosis: {med['dosis']}")
+            print(f"Frecuencia: {med['frecuencia']}")
+            print(f"Fecha de inicio: {med['fecha_inicio'].strftime('%Y-%m-%d')}")
+            print(f"Fecha de término: {med['fecha_termino'].strftime('%Y-%m-%d')}")
+            print(f"Stock: {med['stock']}")
+            print(f"Vencimiento: {med['vencimiento'].strftime('%Y-%m-%d')}")
+            print(f"Doctor: {med['nombre_doctor']}")
+            return
+    print("Medicamento no encontrado.")
+
+def main():
+    medicamentos = []
+    while True:
+        print("\n--- MENÚ PRINCIPAL ---")
+        print("1. Agregar medicamento")
+        print("2. Mostrar medicamentos")
+        print("3. Registrar toma")
+        print("4. Verificar alertas")
+        print("5. Calcular días restantes")
+        print("6. Buscar medicamento")
+        print("7. Salir")
+        
+        opcion = input("Seleccione una opción: ")
+        
+        if opcion == "1":
+            medicamentos.append(agregar_medicamento())
+        elif opcion == "2":
+            mostrar_medicamentos(medicamentos)
+        elif opcion == "3":
+            nombre = input("Ingrese el nombre del medicamento para registrar la toma: ")
+            registrar_toma(medicamentos, nombre)
+        elif opcion == "4":
+            umbral = int(input("Ingrese el umbral de stock para alertas: "))
+            dias_venc = int(input("Ingrese los días de margen para alerta de vencimiento: "))
+            verificar_alertas(medicamentos, umbral, dias_venc)
+        elif opcion == "5":
+            calcular_dias_restantes(medicamentos)
+        elif opcion == "6":
+            nombre = input("Ingrese el nombre del medicamento a buscar: ")
+            buscar_medicamento(medicamentos, nombre)
+        elif opcion == "7":
+            print("Saliendo del sistema...")
+            break
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
+if __name__ == "__main__":
+    main()
