@@ -1,5 +1,11 @@
 from datetime import datetime
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def agregar_medicamento():
     nombre = input("Ingrese el nombre del medicamento: ")
@@ -86,10 +92,50 @@ def buscar_medicamento(medicamentos, nombre_buscar):
             return
     print("Medicamento no encontrado.")
 
+def hablar_con_ia():
+    historial = [
+        {
+            "role": "system",
+            "content": "Eres un asistente medico que responde consultas sobre medicamente, por ejemplo, nombres y dosis usando VANDEMECUM ARGENTINO. NO DEBES HABLAR DE NADA NO RELACIONADO CON ASISTENCIA SOBRE MEDICAMENTOS."
+        }
+    ]
+
+    print("\nChat iniciado. Escribe 'salir' para volver al menú.\n")
+    
+    mensaje = ""
+
+    while mensaje.lower() != "salir":
+        mensaje = input("Tú: ")
+
+        if mensaje.lower() == "salir":
+            print("Saliendo del chat...\n")
+
+        # Agregar mensaje del usuario
+        historial.append({
+            "role": "user",
+            "content": mensaje
+        })
+
+        # Enviar toda la conversación
+        response = client.responses.create(
+            model="gpt-5.5",
+            input=historial
+        )
+
+        respuesta = response.output_text
+
+        print(f"IA: {respuesta}\n")
+
+        # Guardar respuesta del asistente
+        historial.append({
+            "role": "assistant",
+            "content": respuesta
+        })
+
 def main():
     medicamentos = []
     opcion = ""
-    while opcion != "7":
+    while opcion != "8":
         print("\n--- MENÚ PRINCIPAL ---")
         print("1. Agregar medicamento")
         print("2. Mostrar medicamentos")
@@ -97,7 +143,8 @@ def main():
         print("4. Verificar alertas")
         print("5. Calcular días restantes")
         print("6. Buscar medicamento")
-        print("7. Salir")
+        print("7. Consultar sobre medicamentos con el asistente")
+        print("8. Salir")
         
         opcion = input("Seleccione una opción: ")
         
@@ -118,6 +165,8 @@ def main():
             nombre = input("Ingrese el nombre del medicamento a buscar: ")
             buscar_medicamento(medicamentos, nombre)
         elif opcion == "7":
+            hablar_con_ia()
+        elif opcion == "8":
             print("Saliendo del sistema...")
         else:
             print("Opción no válida. Intente nuevamente.")
