@@ -10,15 +10,20 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def agregar_medicamento():
     nombre = input("Ingrese el nombre del medicamento: ")
     dosis = int(input("Ingrese la cantidad de pastillas/ml por cada toma: "))
-    frecuencia = input("Ingrese la frecuencia de administración (ej. cada 8 horas): ")
+    frecuencia = int(input("Ingrese la cantidad de tomas diarias (Ej: si toma cada 8 horas son 3): "))
     
     fecha_inicio = datetime.strptime(input("Ingrese la fecha de inicio (YYYY-MM-DD): "), "%Y-%m-%d")
     fecha_termino = datetime.strptime(input("Ingrese la fecha de término (YYYY-MM-DD): "), "%Y-%m-%d")
     while fecha_termino < fecha_inicio:
         print("Error: la fecha de término no puede ser anterior a la fecha de inicio.")
         fecha_termino = datetime.strptime(input("Ingrese la fecha de término (YYYY-MM-DD): "),"%Y-%m-%d")
+    
     stock = int(input("Ingrese el stock total disponible del medicamento: "))
+    while stock <= 0:
+        stock = int(input("El stock no puede ser 0 o menor. Ingrese el stock total disponible del medicamento: "))
     vencimiento = datetime.strptime(input("Ingrese la fecha de vencimiento (YYYY-MM-DD): "), "%Y-%m-%d")
+    if vencimiento <= datetime.now():
+        print("El medicamento ingresado ya ha vencido. No emitira alertas por vencimiento.")
     nombre_doctor = input("Ingrese el nombre del doctor que recetó el medicamento: ")
     
     medicamento = {
@@ -65,15 +70,22 @@ def verificar_alertas(medicamentos, umbral_stock, dias_vencimiento):
         if med['stock'] < umbral_stock:
             print(f"Alerta: El stock de {med['nombre']} es menor a {umbral_stock}. Stock actual: {med['stock']}")
         
+        else:
+            print("Ningún medicamento esta dentro del umbral especificado para la alerta de stock.")
+
         dias_faltantes = (med['vencimiento'] - hoy).days
         if dias_faltantes < dias_vencimiento and dias_faltantes >= 0:
             print(f"Alerta: El medicamento {med['nombre']} está próximo a vencer. Vence en {dias_faltantes} días.")
 
+        else:
+            print("Ningún medicamento esta dentro del umbral especificado para la fecha de vencimiento.")
+
+
 def calcular_dias_restantes(medicamentos):
-    # Días teóricos asumiendo 1 toma diaria. Para exactitud, se requiere la frecuencia en horas.
     for med in medicamentos:
         if med['dosis'] > 0:
-            dias_restantes = med['stock'] // med['dosis']
+            total_dia = med['dosis'] * med['frecuencia']
+            dias_restantes = med['stock'] // total_dia
             print(f"El medicamento {med['nombre']} tiene suficiente stock para aproximadamente {dias_restantes} días.")
         else:
             print(f"Error en la dosis de {med['nombre']}.")
@@ -135,16 +147,17 @@ def hablar_con_ia():
 def main():
     medicamentos = []
     opcion = ""
-    while opcion != "8":
+    while opcion != "9":
         print("\n--- MENÚ PRINCIPAL ---")
         print("1. Agregar medicamento")
         print("2. Mostrar medicamentos")
         print("3. Registrar toma")
-        print("4. Verificar alertas")
+        print("4. Cargar alertas de medicamentos")
         print("5. Calcular días restantes")
         print("6. Buscar medicamento")
-        print("7. Consultar sobre medicamentos con el asistente")
-        print("8. Salir")
+        print("7. Verificar alertas de medicamentos")
+        print("8. Consultar sobre medicamentos con el asistente")
+        print("9. Salir")
         
         opcion = input("Seleccione una opción: ")
         
@@ -158,15 +171,16 @@ def main():
         elif opcion == "4":
             umbral = int(input("Ingrese el umbral de stock para alertas: "))
             dias_venc = int(input("Ingrese los días de margen para alerta de vencimiento: "))
-            verificar_alertas(medicamentos, umbral, dias_venc)
         elif opcion == "5":
             calcular_dias_restantes(medicamentos)
         elif opcion == "6":
             nombre = input("Ingrese el nombre del medicamento a buscar: ")
             buscar_medicamento(medicamentos, nombre)
         elif opcion == "7":
-            hablar_con_ia()
+            verificar_alertas(medicamentos, umbral, dias_venc)
         elif opcion == "8":
+            hablar_con_ia()
+        elif opcion == "9":
             print("Saliendo del sistema...")
         else:
             print("Opción no válida. Intente nuevamente.")
