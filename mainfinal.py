@@ -108,7 +108,7 @@ def hablar_con_ia():
     historial = [
         {
             "role": "system",
-            "content": "Eres un asistente medico que responde consultas sobre medicamente, por ejemplo, nombres y dosis usando VANDEMECUM ARGENTINO. NO DEBES HABLAR DE NADA NO RELACIONADO CON ASISTENCIA SOBRE MEDICAMENTOS."
+            "content": "Eres un asistente medico que responde consultas sobre medicamente, por ejemplo, nombres y dosis usando VANDEMECUM ARGENTINO. NO DEBES HABLAR DE NADA NO RELACIONADO CON ASISTENCIA SOBRE MEDICAMENTOS. NO USES MARKDOWN SOLO PODES USAR LISTAS NUMERADAS O CON LETRAS, NO NEGRITAS, TITULOS, ETC."
         }
     ]
 
