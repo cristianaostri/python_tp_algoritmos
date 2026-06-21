@@ -84,20 +84,24 @@ def registrar_toma(medicamentos, nombre_buscar):
 
 def verificar_alertas(medicamentos, umbral_stock, dias_vencimiento):
     hoy = datetime.now()
+    alerta_stock = False
+    alerta_vencimiento = False
+
     for med in medicamentos:
         if med['stock'] < umbral_stock:
             print(f"Alerta: El stock de {med['nombre']} es menor a {umbral_stock}. Stock actual: {med['stock']}")
-        
-        else:
-            print("Ningún medicamento esta dentro del umbral especificado para la alerta de stock.")
+            alerta_stock = True
 
         dias_faltantes = (med['vencimiento'] - hoy).days
-        if dias_faltantes < dias_vencimiento and dias_faltantes >= 0:
+        if 0 <= dias_faltantes < dias_vencimiento:
             print(f"Alerta: El medicamento {med['nombre']} está próximo a vencer. Vence en {dias_faltantes} días.")
+            alerta_vencimiento = True
 
-        else:
-            print("Ningún medicamento esta dentro del umbral especificado para la fecha de vencimiento.")
+    if not alerta_stock:
+        print("Ningún medicamento está dentro del umbral especificado para la alerta de stock.")
 
+    if not alerta_vencimiento:
+        print("Ningún medicamento está dentro del umbral especificado para la fecha de vencimiento.")
 
 def calcular_dias_restantes(medicamentos):
     for med in medicamentos:
