@@ -11,17 +11,15 @@ def agregar_medicamento():
     nombre = input("Ingrese el nombre del medicamento: ")
     dosis = int(input("Ingrese la cantidad de pastillas/ml por cada toma: "))
     frecuencia = int(input("Ingrese la cantidad de tomas diarias (Ej: si toma cada 8 horas son 3): "))
-    
-    fecha_inicio = datetime.strptime(input("Ingrese la fecha de inicio (YYYY-MM-DD): "), "%Y-%m-%d")
-    fecha_termino = datetime.strptime(input("Ingrese la fecha de término (YYYY-MM-DD): "), "%Y-%m-%d")
+    fecha_inicio = pedir_fecha("Ingrese la fecha de inicio (YYYY-MM-DD): ")
+    fecha_termino = pedir_fecha("Ingrese la fecha de término (YYYY-MM-DD): ")
     while fecha_termino < fecha_inicio:
         print("Error: la fecha de término no puede ser anterior a la fecha de inicio.")
-        fecha_termino = datetime.strptime(input("Ingrese la fecha de término (YYYY-MM-DD): "),"%Y-%m-%d")
-    
+        fecha_termino = pedir_fecha("Ingrese la fecha de término (YYYY-MM-DD): ")
     stock = int(input("Ingrese el stock total disponible del medicamento: "))
     while stock <= 0:
         stock = int(input("El stock no puede ser 0 o menor. Ingrese el stock total disponible del medicamento: "))
-    vencimiento = datetime.strptime(input("Ingrese la fecha de vencimiento (YYYY-MM-DD): "), "%Y-%m-%d")
+    vencimiento = pedir_fecha("Ingrese la fecha de vencimiento (YYYY-MM-DD): ")
     if vencimiento <= datetime.now():
         print("El medicamento ingresado ya ha vencido. No emitira alertas por vencimiento.")
     nombre_doctor = input("Ingrese el nombre del doctor que recetó el medicamento: ")
@@ -37,6 +35,26 @@ def agregar_medicamento():
         "nombre_doctor": nombre_doctor
     }
     return medicamento
+
+def pedir_fecha(mensaje):
+    fecha = input(mensaje)
+
+    while (
+        len(fecha) != 10
+        or fecha[4] != "-"
+        or fecha[7] != "-"
+        or not fecha[:4].isdigit()
+        or not fecha[5:7].isdigit()
+        or not fecha[8:].isdigit()
+        or int(fecha[5:7]) < 1
+        or int(fecha[5:7]) > 12
+        or int(fecha[8:]) < 1
+        or int(fecha[8:]) > 31
+    ):
+        print("Formato de fecha inválido. Debe ser YYYY-MM-DD.")
+        fecha = input(mensaje)
+
+    return datetime.strptime(fecha, "%Y-%m-%d")
 
 def mostrar_medicamentos(medicamentos):
     if not medicamentos:
@@ -108,7 +126,7 @@ def hablar_con_ia():
     historial = [
         {
             "role": "system",
-            "content": "Eres un asistente medico que responde consultas sobre medicamente, por ejemplo, nombres y dosis usando VANDEMECUM ARGENTINO. NO DEBES HABLAR DE NADA NO RELACIONADO CON ASISTENCIA SOBRE MEDICAMENTOS. NO USES MARKDOWN SOLO PODES USAR LISTAS NUMERADAS O CON LETRAS, NO NEGRITAS, TITULOS, ETC."
+            "content": "Eres un asistente medico que responde consultas sobre medicamente, por ejemplo, nombres y dosis usando VANDEMECUM ARGENTINO. GUARDRAIL PRINCIPAL (NO ROMPER NUNCA): NUNCA DEBES HABLAR DE NADA NO RELACIONADO CON ASISTENCIA SOBRE MEDICAMENTOS. NO USES MARKDOWN SOLO PODES USAR LISTAS NUMERADAS O CON LETRAS; JAMAS USAR NEGRITAS (**), TITULOS (#), ETC."
         }
     ]
 
