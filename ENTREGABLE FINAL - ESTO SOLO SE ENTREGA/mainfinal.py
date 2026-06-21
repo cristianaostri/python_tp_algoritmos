@@ -178,6 +178,9 @@ def main():
     #Controla el menú principal y coordina el acceso a las distintas funciones del programa.
     medicamentos = []
     opcion = ""
+    umbral = None
+    dias_venc = None
+
     while opcion != "9":
         print("\n--- MENÚ PRINCIPAL ---")
         print("1. Agregar medicamento")
@@ -208,7 +211,10 @@ def main():
             nombre = input("Ingrese el nombre del medicamento a buscar: ")
             buscar_medicamento(medicamentos, nombre)
         elif opcion == "7":
-            verificar_alertas(medicamentos, umbral, dias_venc)
+            if umbral is None or dias_venc is None:
+                print("Primero debe cargar las alertas desde la opción 4.")
+            else:
+                verificar_alertas(medicamentos, umbral, dias_venc)
         elif opcion == "8":
             hablar_con_ia()
         elif opcion == "9":
